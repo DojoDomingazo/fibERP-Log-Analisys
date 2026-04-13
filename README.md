@@ -14,7 +14,7 @@ L'objectiu principal és la creació d'una **aplicació web tipus ERP** amb un *
 
 L'arquitectura es distribueix en **dues màquines virtuals (VM)** per optimitzar els recursos, especialment a causa de l'ús intensiu de memòria de la intel·ligència artificial.
 
-![Arquitectura del Sistema](arquitectura.png)
+![Arquitectura del Sistema](assets/arquitectura.png)
 
 ### VM1 - Aplicació i Automatització
 
@@ -60,7 +60,7 @@ Funcionalitats principals:
    
 _Secció de consulta de comandes_
 
-![Secció d'administració](web.png)
+![Secció d'administració](assets/web.png)
 
 ## Backend (API REST)
 
