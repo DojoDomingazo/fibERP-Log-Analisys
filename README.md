@@ -1,125 +1,173 @@
-# FibERP + Anàlisi de Logs
+# ERP System with Integrated Intrusion Detection (IDS)
 
-> Aplicació web ERP amb sistema de detecció d'intrusions (IDS) integrat.
-
-## Descripció
-
-**FibERP** és un projecte desenvolupat dins l'assignatura _"Projecte de Tecnologia de la Informació (PTI)"_ de la Facultat d'Informàtica de Barcelona (FIB) de la UPC.
-
-L'objectiu principal és la creació d'una **aplicació web tipus ERP** amb un **sistema de detecció d'intrusions (IDS)** integrat per monitorar i protegir els fluxos d'informació. L'ERP actua com un generador controlat de logs, utilitzant l'activitat de l'aplicació com a font d'informació primària per al monitoratge de seguretat.
+> Full-stack ERP application extended with a real-time Intrusion Detection System (IDS) and automated security analysis pipeline.
 
 ---
 
-## Arquitectura del Sistema
+## My Contributions
 
-L'arquitectura es distribueix en **dues màquines virtuals (VM)** per optimitzar els recursos, especialment a causa de l'ús intensiu de memòria de la intel·ligència artificial.
+In this project, I focused on the **automation and security orchestration layer**, specifically:
 
-![Arquitectura del Sistema](assets/arquitectura.png)
-
-### VM1 - Aplicació i Automatització
-
-Components desplegats mitjançant contenidors Docker:
-
-| Component       | Descripció                                                                                                    |
-| --------------- | ------------------------------------------------------------------------------------------------------------- |
-| **Frontend**    | Desenvolupat amb HTML, CSS i JavaScript natiu, sense frameworks externs                                       |
-| **Backend**     | Construït amb Symfony 7, gestiona la lògica de negoci i la generació de logs (`security.log` i `generic.log`) |
-| **n8n**         | Plataforma low-code d'automatització que orquestra els fluxos de treball i la integració de l'IDS             |
-| **Wazuh Agent** | Encarregat de capturar i enviar els logs de l'ERP cap al manager                                              |
-
-### VM2 - IA i Seguretat
-
-Dedicada al processament de dades i anàlisi intel·ligent:
-
-| Component                   | Descripció                                                                                                        |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| **LLM (Ollama)**            | Execució local del model Qwen 2.5:3b instruct per analitzar alertes i fitxers garantint la privadesa de les dades |
-| **Wazuh Manager/Dashboard** | Centralitza la decodificació dels logs, la indexació i la generació d'alertes                                     |
+- Designed and implemented **automation workflows in n8n** to process and respond to security alerts  
+- Integrated **Wazuh alerts with n8n**, enabling automated handling and enrichment of security events  
+- Built workflows connecting **Wazuh, VirusTotal API, and LLM (Ollama)** for intelligent log analysis  
+- Contributed to **system integration and debugging across services** (Docker, backend, IDS components)  
+- Assisted in configuring and validating **log pipelines and alert generation**
 
 ---
-## Interacció amb el Projecte
 
-El projecte FibERP està format per diversos serveis accessibles via web o mitjançant SSH. Sempre amb conexió UPC  (directe o via VPN - FortiClient)
-A continuació es detallen els punts d’accés a cada component per facilitar la seva exploració i validació.
-Les credencials necessàries es troben documentades a l’annex de la memòria i no s’inclouen en aquest repositori.
+## Description
 
+This project was developed as part of the *Projecte de Tecnologia de la Informació (PTI)* course at FIB (UPC).
 
-## ERP – Aplicació Web
+The goal is to build a **web-based ERP system** enhanced with an **Intrusion Detection System (IDS)** to monitor and protect application activity.
 
-Interfície principal del sistema ERP, des d’on es genera l’activitat que produeix els logs de seguretat.
+The ERP acts as a controlled **log generator**, using real user interactions as input for security monitoring and analysis.
 
-Accés web:
-http://10.4.41.69
-Funcionalitats principals:
+---
 
-- Autenticació i gestió d’usuaris
-- Gestió de productes i comandes
-- Control horari (fitxatge)¡
-- Consulta de nòmines 
-- Panell d’administració (usuaris amb rol d’administrador)
-   
-_Secció de consulta de comandes_
+## Key Features
 
-![Secció d'administració](assets/web.png)
+- Real-time **log monitoring and intrusion detection** using Wazuh  
+- Automated **security workflows and alert orchestration** with n8n  
+- Integration with **VirusTotal API** for threat intelligence enrichment  
+- **LLM-based alert summarization** using Ollama (Qwen 2.5)  
+- Distributed architecture across **two virtual machines**  
+- Secure backend with **REST API and JWT authentication**
 
-## Backend (API REST)
+---
 
-Servei encarregat de la lògica de negoci i de la generació de logs de seguretat.
+## System Impact
 
-API REST:
-http://10.4.41.69:8080
-Característiques:
-- Endpoints protegits amb JWT
-- Generació de logs security.log i generic.log
-- Validació d’accions sensibles (login, pujada de fitxers, canvis de contrasenya)
-- Aquest servei no disposa d’interfície gràfica i és consumit exclusivament pel frontend.
+- Processes and analyzes **large volumes of application-generated logs**  
+- Reduces manual effort through **automated alert triaging and enrichment**  
+- Enables **near real-time detection of suspicious activity**  
+- Demonstrates integration of **IDS + automation + AI-based analysis**
 
-## n8n – Automatització de Fluxos
+---
 
-Plataforma d’automatització utilitzada per orquestrar la comunicació entre Wazuh, VirusTotal i el model d’IA.
+## Architecture
 
-Accés web:
-http://10.4.41.69:5678/
+The system is deployed across **two virtual machines (VMs)** to optimize performance and isolate workloads.
 
-Funcionalitats:
-- Visualització i edició dels fluxos de seguretat
-- Recepció d’alertes mitjançant webhooks
-- Enviament de logs i alertes al model d’IA
-- Generació de resums i notificacions
+![System Architecture](assets/arquitectura.png)
+
+### VM1 – Application & Automation Layer
+
+- **Frontend:** HTML, CSS, JavaScript  
+- **Backend:** Symfony 7 (business logic + log generation)  
+- **n8n:** automation and orchestration of security workflows  
+- **Wazuh Agent:** collects and forwards logs  
+
+### VM2 – Security & Analysis Layer
+
+- **Wazuh Manager & Dashboard:** log processing, indexing, and alert generation  
+- **LLM (Ollama):** intelligent analysis and summarization of alerts  
+
+---
+
+## Technical Challenges
+
+### High Volume of Security Alerts
+Wazuh generates a large number of alerts, many of which are noisy.  
+→ Addressed by designing **n8n workflows to filter, prioritize, and enrich alerts**
+
+### Multi-System Integration
+Coordinating communication between Wazuh, n8n, external APIs, and LLM required careful orchestration.  
+→ Implemented **event-driven workflows using webhooks and automation pipelines**
+
+### Resource Constraints (LLM)
+Running a local LLM requires significant memory and compute resources.  
+→ Solved by **separating the system into two VMs**
+
+### Lack of Context in Raw Logs
+Raw logs are difficult to interpret and act upon.  
+→ Enhanced alerts using **VirusTotal + LLM summarization**
+
+---
+
+## ERP Application
+
+Main interface where user activity generates logs for security monitoring.
+
+![ERP Interface](assets/web.png)
+
+### Features
+
+- User authentication and management  
+- Product and order management  
+- Time tracking  
+- Payroll consultation  
+- Admin panel  
+
+---
+
+## Backend (REST API)
+
+Handles business logic and security log generation.
+
+### Features
+
+- Secure endpoints using **JWT authentication**  
+- Generation of `security.log` and `generic.log`  
+- Validation of sensitive actions (login, file upload, password changes)  
+
+---
+
+## n8n – Automation Workflows
+
+Core component for **security orchestration and automation**.
+
+### Features
+
+- Processes alerts received from Wazuh  
+- Enriches alerts using VirusTotal  
+- Sends data to LLM for summarization  
+- Automates responses and notifications  
+
+---
 
 ## Wazuh Dashboard
 
-Interfície de monitoratge de seguretat i visualització de les alertes generades a partir dels logs de l’ERP.
+Centralized security monitoring interface.
 
-Accés web:
-https://10.4.41.70/app/login?
+### Features
 
-Funcionalitats:
-- Visualització d’alertes de seguretat
-- Consulta d’esdeveniments i logs indexats
-- Verificació de l’estat de l’agent i del sistema IDS
-  
-## Portainer – Gestió de Contenidors
+- Visualization of alerts and events  
+- Log indexing and analysis  
+- System and agent status monitoring  
 
-Eina gràfica per a la gestió i monitoratge dels contenidors Docker desplegats al projecte.
+---
 
-Accés web:
-https://10.4.41.69:9443/#!/auth
+## Container Management (Portainer)
 
-Funcionalitats:
-- Visualització de contenidors actius
-- Gestió d’imatges i stacks
-- Monitoratge de recursos i estat dels serveis
+Used for managing Docker containers and services.
 
- ## Accés per SSH a les Màquines Virtuals
+---
 
-Per a tasques d’administració, depuració o desplegament manual, es pot accedir a les màquines virtuals mitjançant SSH:
-Tots els fitxers de configuració de Wazuh es troben a /var/ossec/... 
+## Tech Stack
 
-VM1 – Aplicació i automatització:
-10.4.41.69
+- **Backend:** Symfony 7 (PHP)  
+- **Frontend:** HTML, CSS, JavaScript  
+- **Security:** Wazuh (IDS)  
+- **Automation:** n8n  
+- **AI:** Ollama (Qwen 2.5)  
+- **Containerization:** Docker  
+- **External APIs:** VirusTotal  
 
-VM2 – Seguretat i IA:
-10.4.41.70
+---
 
-Les credencials d’accés es troben documentades a l’annex de la memòria.
+## How to Run
+
+1. Clone the repository  
+2. Configure environment variables  
+3. Run services using Docker Compose  
+4. Access the main services locally  
+
+*(Configuration may vary depending on environment setup)*
+
+---
+
+## Notes
+
+This project was developed in an academic context and extended with additional features focused on **security automation, system integration, and real-time analysis**.
